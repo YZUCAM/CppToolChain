@@ -7,5 +7,10 @@ Unlike interpreted language of Python, C++ is a static compiled language. How to
 
 To help overcome the barrier of C++ compiling diffculty, we choose CMake for build makefile for compiler and Vcpkg for c++ external libraries management. 
 
+## Usage
+cmake_instruction.md document records template for writing a standard cmake file. It has been splitted into two sections.<br><br> The first basic section quickly guides how to write a cmake file. For people who are dealing with their small c++ project, it is enough for quick get your file compiled.<br><br>
+The second advanced section introduced building blocks when you use cmake as script mode. This mode could provide you more flexibility when you are dealing with super large project.<br><br>
 
 ## Acknowlegement
+I appreciate the Daniel Gakwaya for providing a very inspiring tutorial series for CMake-Episode on YouTube. Most of contents in this instruction are summarized from his YouTube Series. Strongly recommend to take a look on his original videos. There are much more explanations on CMake and other interesting topics. <br>
+https://www.youtube.com/watch?v=rHjZrJmFyBQ&list=PLQMs5svASiXOraccrnEbkd_kVHbAdC2mp&index=1

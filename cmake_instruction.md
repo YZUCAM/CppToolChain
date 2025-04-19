@@ -342,4 +342,9 @@ macro(ModifyGlobalVariable V)
     set(${V} "New value")
 endmacro()
 ```
+---
+With the help of the those building blocks, now you should be able to have at least a feeling of how to generate builder for big C++ project. By flow control, you are allowed to selectively build the project in your own way.
 
+### Acknowledgement
+I appreciate the Daniel Gakwaya for providing a very inspiring tutorial series for CMake-Episode on YouTube. Most of contents in this instruction are summarized from this YouTube Series. Strongly recommend to take a look on his original videos. There are much more explanations on CMake and other interesting topics. <br>
+https://www.youtube.com/watch?v=rHjZrJmFyBQ&list=PLQMs5svASiXOraccrnEbkd_kVHbAdC2mp&index=1
