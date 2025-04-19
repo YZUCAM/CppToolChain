@@ -185,6 +185,7 @@ add_subdirectory(src/stats)
 add_executable(app src/main.cpp)
 target_link_libraires(app PUBLIC stats_lib)
 ```
+
 ---
 # CMake Tutorial (Advanced)
 Previous content is all about using cmake in project level and help to generate builder files. Later use this builder files quickly compile your c++ project.
@@ -343,8 +344,52 @@ macro(ModifyGlobalVariable V)
 endmacro()
 ```
 ---
-With the help of the those building blocks, now you should be able to have at least a feeling of how to generate builder for big C++ project. By flow control, you are allowed to selectively build the project in your own way.
+With the help of the those building blocks, now you should be able to have at least a feeling of how to generate builder for big C++ project. By flow control, you are allowed to selectively build the project in your own way.<br>
 
+
+## custom targets
+this case will use third library clang-format to format our source code.<br>
+```
+#define a function to create a custom target for running clang-format
+
+function(add_clang_format_target TARGET_NAME SOURCE_DIR)
+    find_program(CLANG-FORMAT_PATH clang-format REQUIRED)
+    #find all C++ source code 
+    file(GLOB_RECURSE FORMAT_SOURCES LIST_DIRECTORIES false 
+    "${SOURCE_DIR}/*.cpp"
+    "${SOURCE_DIR}/*.h")
+
+    #create a customer target
+    add_custom_target(${TARGET_NAME}
+        COMMAND ${CLANG-FORMAT_PATH} -i ${FORMAT_SOURCES}
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        COMMENT "Running clang-format on ${SOURCE_DIR} sources")
+endfunction()
+
+add_clang_format_target(format-code ${PROJECT_SOURCE_DIR})
+```
+It will generate another builder to run batch process of clang-format:<br>
+`cmake --build build -t format-code`
+
+## Dependencies FetchContent
+build a .cmake file, eg: AddFmt.cmake<br>
+```
+include(FetchContent)
+FetchContent_Declare(
+    fmt
+    GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+    GIT_TAG 10.1.1
+)
+
+FetchContent_MakeAvailable(fmt)
+```
+In main CMakeLists.txt, add:<br>
+include(AddFmt)
+
+target_link_libraries(mainApp PRIVATE fmt::fmt)
+
+ 
+---
 ### Acknowledgement
 I appreciate the Daniel Gakwaya for providing a very inspiring tutorial series for CMake-Episode on YouTube. Most of contents in this instruction are summarized from this YouTube Series. Strongly recommend to take a look on his original videos. There are much more explanations on CMake and other interesting topics. <br>
 https://www.youtube.com/watch?v=rHjZrJmFyBQ&list=PLQMs5svASiXOraccrnEbkd_kVHbAdC2mp&index=1
