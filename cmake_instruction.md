@@ -1,4 +1,4 @@
-# CMake Tutorial
+# CMake Tutorial (Basic)
 <div align="right">
 By Dr.Yi Zhu 19-Apr-2025
 </div>
@@ -158,5 +158,37 @@ target_link_libraires(app PUBLIC stats_lib)
 ``` 
 
 ### add_subdirectory command
+In include command, the .cmake file directory and ${CMAKE_CURRENT_SOURCE_DIR} are not unified, which may polute CMakeLists.txt variables.<br>
 
+add_subdirectory command can unify the path and let program itself looking for CMakeLists.txt files in each directory. <br>
+Example of stats_lib, in stats_lib folder, create CMakeLists.txt:
+```
+add_libraries(stats_lib stats.cpp)
+target_include_directories(stats_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_link_libraries(stats_lib PRIVATE math_lib)
+```
+In this case, you don't need trace back to our Main CMakeLists.txt diretcory and start traversal path. You can directly add path in current directory. 
+```
+cmake_minimum_required(VERSION 3.5)
+project(employee_system
+        VERSION 0.0.1 
+        DESCRIPTION "first employee managerment system for practice CMake tool"
+        LANGUAGES CXX)
 
+# The math library
+add_subdirectory(src/maths)
+
+# The stats library
+add_subdirectory(src/stats)
+
+# The main excutable target
+add_executable(app src/main.cpp)
+target_link_libraires(app PUBLIC stats_lib)
+```
+---
+# CMake Tutorial (Advanced)
+Previous content is all about using cmake in project level and help to generate builder files. Later use this builder files quickly compile your c++ project.
+
+The next section, it will use cmake in script mode. 
+
+## message commands and arguments
