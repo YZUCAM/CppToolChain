@@ -192,3 +192,154 @@ Previous content is all about using cmake in project level and help to generate 
 The next section, it will use cmake in script mode. 
 
 ## message commands and arguments
+you can print the string when you run CMake, simple application is check cmake ${Variables}.<br>
+When use cmake script mode, the file extension is .cmake. It won't generate project file. <br>
+
+Single line:<br>
+`message("The text you want to print")`
+
+The script can be run with command:<br>
+`cmake -P <script_name>.cmake`
+
+ Multiple lines:
+ ```
+ message([=[the first line
+            the second line
+            the third line
+            ]=])
+```
+
+Multiple arguments:<br>
+`message(first_arg;second_arg;third_arg)`
+
+## Variables
+Like other script language, you can define your vairable and use it later in the script.
+
+`set(var1 "Text1")`
+```
+1. variables reference
+
+set(one abc)            #abc
+set(two ${one}de)       #abcde
+set(three ${two} fg)    #abcde;fg
+set(four thre)          #thre
+set(five ${${four}e})   #abcde;fg
+```
+```
+2. environment variables
+environment variables only affect your local cmake files. It won't affect your global system environment variables
+
+set(ENV{MY_PATH} "/path to directory")
+message($ENV{MY_PATH})
+
+but you can read your system environment variable:
+message(${MACRO_NAME})
+```
+```
+3. catch variables
+set(catch_var "This value" CACHE STRING)
+messgae(${catch_var})
+```
+
+## List
+```
+set(stu_lst elem1 elem2 elem3)
+set(stu_lst2 elem1;elem2;elem3)
+
+#the first LENGTH indicate calculate how many element
+list(LENGTH stu_lst stu_lst_LENGTH)    
+message("stu_lst has ${stu_lst_LENGTH} elements)
+
+list(APPEND stu_lst elem4)
+
+#get third element of list stu_lst and store it in ELEMENT
+list(GET stu_lst 2 ELEMENT)  
+
+#bool variables
+option(<option_variable> "description" [initial_value])
+option(OPTIMIZE "need optimization?" ON)
+```
+
+## If condition
+```
+if(VAR1)
+    message("VAR1 is True")
+else()
+    message("VAR1 is FALSE")
+endif()
+
+#if variable is not explicity state FALSE, variable is seen as True.
+#Do not directly pass TRUE or FALSE to if(). eg:
+set(VAR TRUE)
+if(${VAR})
+    messgae("VAR1 is True")
+else()
+    message("VAR1 is FALSE")
+endif()
+#That will give you FALSE result !
+
+
+# you can use other conditions
+eg:
+if (2 EQUAL 3)
+if (2 LESS 1)
+if (2 STRLESS_EQUAL 1)  # equivalent to <=
+```
+
+## LOOP
+### foreach
+```
+set(sports "S1" "S2" "S3" "S4" "S5" "S6" "S7")
+
+foreach(item ${sports})
+    message("Sport: ${item}")
+endforeach()
+```
+
+### while
+```
+set(sports "S1" "S2" "S3" "S4" "S5" "S6" "S7")
+
+list(LENGTH sports num)
+set(counter 0)
+
+while(counter LESS num)
+    list(GET sports $(counter) item)
+    message("Sport:  ${item}")
+
+    math(EXPR counter "${counter} + 1")
+
+endwhile()
+```
+
+## functions
+```
+#passing parameter by value
+function(ModifyVariables V1 V2)
+    set(${v1} "New value")
+    set(${v2} "New value")
+endfunction()
+
+#passing parameter by reference (global variable will be changed)
+function(ModifyVariables V1 V2)
+    set(${v1} "New value" PARENT_SCOPE)
+    set(${v2} "New value" PARENT_SCOPE)
+endfunction()
+
+#Increment variable
+function(IncreVariables V3)
+    math(EXPR ${V3} "${${V3}} + 1")
+    set(${V3} ${${V3}} PARENT_SCOPE)
+endfunction()
+```
+
+## macro()
+macro() is similar like function. But in macro, all passing parameters or macros will be changed globally.<br>
+```
+#global variable will be changed
+
+macro(ModifyGlobalVariable V)
+    set(${V} "New value")
+endmacro()
+```
+
