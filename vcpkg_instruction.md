@@ -55,3 +55,18 @@ https://learn.microsoft.com/en-us/vcpkg/get_started/get-started-vscode?pivots=sh
 
 ---
 # Project Template
+Typical project composites:
+```
+library modules ----> Core -------> main (program entry)
+Before main, everything is modulized and can be compiled to libraries and test individually.
+
+Code Editting 
+Dependencies 
+Formatting      (good habit to organize code unit)
+Documentation   (good habit for future distribution)
+Testing         
+Editor Intergration
+```
+A good C++ project layout:<br>
+https://joholl.github.io/pitchfork-website/
+
